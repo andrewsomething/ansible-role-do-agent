@@ -1,0 +1,10 @@
+---
+agent_pre_packages:
+  - apt-transport-https
+  - ca-certificates
+
+agent_apt_key_url: https://repos.sonar.digitalocean.com/sonar-agent.asc
+
+agent_apt_repo: deb https://repos.sonar.digitalocean.com/apt main main
+
+agent_apt_repo_file: digitalocean-agent.list

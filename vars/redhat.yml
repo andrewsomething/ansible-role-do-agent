@@ -1,0 +1,6 @@
+---
+agent_yum_key_url: https://repos.sonar.digitalocean.com/sonar-agent.asc
+
+agent_yum_repo: https://repos.sonar.digitalocean.com/yum/$basearch
+
+agent_yum_repo_file: digitalocean-agent.repo

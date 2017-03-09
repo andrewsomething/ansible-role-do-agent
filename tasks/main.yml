@@ -1,0 +1,59 @@
+---
+- name: gather os specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ ansible_os_family|lower }}.yml"
+      paths:
+      - ../vars
+      skip: true
+
+- name: ensure do-agent requirements are installed
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ agent_pre_packages | default([]) }}"
+  when: agent_pre_packages is defined
+
+- name: ensure do-agent apt repository public key is installed
+  apt_key:
+    url: "{{ agent_apt_key_url }}"
+    state: present
+  when: agent_apt_key_url is defined
+
+- name: ensure do-agent apt repository is enabled
+  apt_repository:
+    repo: "{{ agent_apt_repo }}"
+    filename: "{{ agent_apt_repo_file }}"
+    update_cache: true
+    state: present
+  when: agent_apt_repo is defined
+
+- name: ensure do-agent yum repository is enabled
+  yum_repository:
+    name: do-agent
+    description: DigitalOcean agent repo
+    baseurl: "{{ agent_yum_repo }}"
+    file: "{{ agent_yum_repo_file }}"
+    gpgkey: "{{ agent_yum_key_url }}"
+    gpgcheck: yes
+    state: present
+  when: agent_yum_repo is defined
+
+- name: ensure do-agent packages are installed
+  package:
+    name: do-agent
+    state: latest
+
+- name: ensure do-agent service is started and enabled
+  service:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  with_items: do-agent
+
+- include: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ ansible_os_family|lower }}.yml"
+      skip: true

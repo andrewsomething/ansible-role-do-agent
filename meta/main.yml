@@ -1,0 +1,28 @@
+galaxy_info:
+  author: Andrew Starr-Bochicchio
+  description: Cross-distro installation of the DigitalOcean monitoring agent
+  license: MIT
+
+  min_ansible_version: 1.2
+
+  github_branch: https://github.com/andrewsomething/ansible-role-do-agent
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - wily
+        - xenial
+        - yakkety
+    - name: Debian
+      versions:
+        - jessie
+    - name: EL
+      versions:
+        - 7
+
+  galaxy_tags:
+    - cloud
+    - monitoring
+
+dependencies: []
