@@ -4,13 +4,20 @@ Ansible do-agent role
 
 Role to install the DigitalOcean monitoring agent on all supported distros.
 
+Installation
+------------
+
+To install this role from Ansible Galaxy
+
+    ansible-galaxy install andrewsomething.do-agent
+
 Example Playbook
 ----------------
 
     - hosts: all
       become: true
       roles:
-         - do-agent
+         - andrewsomething.do-agent
 
 License
 -------
