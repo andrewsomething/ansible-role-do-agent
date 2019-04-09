@@ -11,11 +11,18 @@ galaxy_info:
         - wily
         - xenial
         - yakkety
+        - xenial
+        - zesty
+        - artful
+        - bionic
+        - cosmic
     - name: Debian
       versions:
         - jessie
+        - stretch
     - name: EL
       versions:
+        - 6
         - 7
   galaxy_tags:
     - cloud
