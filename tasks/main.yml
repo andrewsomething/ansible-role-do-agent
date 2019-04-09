@@ -21,6 +21,14 @@
     state: present
   when: agent_apt_key_url is defined
 
+- name: ensure old do-agent apt repository is removed
+  apt_repository:
+    repo: "{{ agent_apt_repo_old }}"
+    filename: "{{ agent_apt_repo_file }}"
+    update_cache: true
+    state: absent
+  when: agent_apt_repo_old is defined
+
 - name: ensure do-agent apt repository is enabled
   apt_repository:
     repo: "{{ agent_apt_repo }}"
@@ -28,6 +36,19 @@
     update_cache: true
     state: present
   when: agent_apt_repo is defined
+
+- name: ensure old do-agent yum repository is removed
+  yum_repository:
+    name: digitalocean-agent
+    description: DigitalOcean agent
+    baseurl: "{{ agent_yum_repo_old }}"
+    file: "{{ agent_yum_repo_file }}"
+    gpgkey: "{{ agent_yum_key_url }}"
+    gpgcheck: yes
+    enabled: yes
+    failovermethod: priority
+    state: absent
+  when: agent_yum_repo_old is defined
 
 - name: ensure do-agent yum repository is enabled
   yum_repository:
@@ -37,12 +58,18 @@
     file: "{{ agent_yum_repo_file }}"
     gpgkey: "{{ agent_yum_key_url }}"
     gpgcheck: yes
-    state: present
     enabled: yes
     failovermethod: priority
+    state: present
   when: agent_yum_repo is defined
 
-- name: ensure do-agent packages are installed
+- name: ensure old do-agent packages are uninstalled with yum
+  package:
+    name: do-agent-0.*
+    state: absent
+  when: agent_yum_repo_old is defined
+
+- name: ensure latest do-agent packages are installed
   package:
     name: do-agent
     state: latest
