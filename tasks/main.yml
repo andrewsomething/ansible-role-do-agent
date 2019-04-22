@@ -52,7 +52,7 @@
 
 - name: ensure do-agent yum repository is enabled
   yum_repository:
-    name: do-agent
+    name: digitalocean-agent
     description: DigitalOcean agent
     baseurl: "{{ agent_yum_repo }}"
     file: "{{ agent_yum_repo_file }}"
