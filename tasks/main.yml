@@ -37,19 +37,6 @@
     state: present
   when: agent_apt_repo is defined
 
-- name: ensure old do-agent yum repository is removed
-  yum_repository:
-    name: digitalocean-agent
-    description: DigitalOcean agent
-    baseurl: "{{ agent_yum_repo_old }}"
-    file: "{{ agent_yum_repo_file }}"
-    gpgkey: "{{ agent_yum_key_url }}"
-    gpgcheck: yes
-    enabled: yes
-    failovermethod: priority
-    state: absent
-  when: agent_yum_repo_old is defined
-
 - name: ensure do-agent yum repository is enabled
   yum_repository:
     name: digitalocean-agent
