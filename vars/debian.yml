@@ -2,6 +2,7 @@
 agent_pre_packages:
   - apt-transport-https
   - ca-certificates
+  - gnupg
 
 agent_apt_key_url: https://repos.insights.digitalocean.com/sonar-agent.asc
 
