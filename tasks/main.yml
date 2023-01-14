@@ -8,6 +8,14 @@
       - ../vars
       skip: true
 
+- name: ensure old-style do-agent apt repository line is removed
+  apt_repository:
+    repo: "{{ agent_apt_repo_without_key }}"
+    filename: "{{ agent_apt_repo_file }}"
+    update_cache: true
+    state: absent
+  when: agent_apt_repo_without_key is defined
+
 - name: ensure do-agent requirements are installed
   package:
     name: "{{ item }}"
@@ -31,11 +39,11 @@
 
 - name: ensure do-agent apt repository is enabled
   apt_repository:
-    repo: "{{ agent_apt_repo }}"
+    repo: "{{ agent_apt_repo_with_key }}"
     filename: "{{ agent_apt_repo_file }}"
     update_cache: true
     state: present
-  when: agent_apt_repo is defined
+  when: agent_apt_repo_with_key is defined
 
 - name: ensure do-agent yum repository is enabled
   yum_repository:
