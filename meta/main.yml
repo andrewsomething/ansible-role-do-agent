@@ -7,15 +7,11 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - trusty
-        - wily
-        - xenial
-        - yakkety
-        - xenial
-        - zesty
-        - artful
+        - jammy
+        - focal
         - bionic
-        - cosmic
+        - trusty
+        - xenial
     - name: Debian
       versions:
         - jessie
