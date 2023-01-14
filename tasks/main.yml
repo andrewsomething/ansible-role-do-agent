@@ -66,8 +66,8 @@
     baseurl: "{{ agent_yum_repo }}"
     file: "{{ agent_yum_repo_file }}"
     gpgkey: "{{ agent_yum_key_url }}"
-    gpgcheck: yes
-    enabled: yes
+    gpgcheck: true
+    enabled: true
     failovermethod: priority
     state: present
   when: agent_yum_repo is defined
@@ -85,10 +85,9 @@
 
 - name: ensure do-agent service is started and enabled
   ansible.builtin.service:
-    name: "{{ item }}"
+    name: do-agent
     enabled: true
     state: started
-  with_items: do-agent
 
 - include: "{{ item }}"
   with_first_found:
