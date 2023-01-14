@@ -1,15 +1,15 @@
 ---
 - name: gather os specific variables
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - files:
-      - "{{ ansible_os_family|lower }}.yml"
+        - "{{ ansible_os_family | lower }}.yml"
       paths:
-      - ../vars
+        - ../vars
       skip: true
 
 - name: ensure old-style do-agent apt repository line is removed
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ agent_apt_repo_without_key }}"
     filename: "{{ agent_apt_repo_file }}"
     update_cache: true
@@ -17,7 +17,7 @@
   when: agent_apt_repo_without_key is defined
 
 - name: ensure old do-agent apt repository is removed
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ agent_apt_repo_old }}"
     filename: "{{ agent_apt_repo_file }}"
     update_cache: true
@@ -25,7 +25,7 @@
   when: agent_apt_repo_old is defined
 
 - name: ensure do-agent requirements are installed
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: latest
   with_items: "{{ agent_pre_packages | default([]) }}"
@@ -52,7 +52,7 @@
       when: temp_armored_apt_key.dest
 
 - name: ensure do-agent apt repository is enabled
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ agent_apt_repo_with_key }}"
     filename: "{{ agent_apt_repo_file }}"
     update_cache: true
@@ -60,7 +60,7 @@
   when: agent_apt_repo_with_key is defined
 
 - name: ensure do-agent yum repository is enabled
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: digitalocean-agent
     description: DigitalOcean agent
     baseurl: "{{ agent_yum_repo }}"
@@ -73,18 +73,18 @@
   when: agent_yum_repo is defined
 
 - name: ensure old do-agent packages are uninstalled with yum
-  package:
+  ansible.builtin.package:
     name: do-agent-0.*
     state: absent
   when: agent_yum_repo_old is defined
 
 - name: ensure latest do-agent packages are installed
-  package:
+  ansible.builtin.package:
     name: do-agent
     state: latest
 
 - name: ensure do-agent service is started and enabled
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     enabled: true
     state: started
@@ -93,5 +93,5 @@
 - include: "{{ item }}"
   with_first_found:
     - files:
-      - "{{ ansible_os_family|lower }}.yml"
+        - "{{ ansible_os_family|lower }}.yml"
       skip: true
