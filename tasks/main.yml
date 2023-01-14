@@ -8,18 +8,13 @@
       - ../vars
       skip: true
 
-- name: ensure do-agent requirements are installed
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items: "{{ agent_pre_packages | default([]) }}"
-  when: agent_pre_packages is defined
-
-- name: ensure do-agent apt repository public key is installed
-  apt_key:
-    url: "{{ agent_apt_key_url }}"
-    state: present
-  when: agent_apt_key_url is defined
+- name: ensure old-style do-agent apt repository line is removed
+  apt_repository:
+    repo: "{{ agent_apt_repo_without_key }}"
+    filename: "{{ agent_apt_repo_file }}"
+    update_cache: true
+    state: absent
+  when: agent_apt_repo_without_key is defined
 
 - name: ensure old do-agent apt repository is removed
   apt_repository:
@@ -29,13 +24,40 @@
     state: absent
   when: agent_apt_repo_old is defined
 
+- name: ensure do-agent requirements are installed
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ agent_pre_packages | default([]) }}"
+  when: agent_pre_packages is defined
+
+- name: ensure do-agent apt repository public key is installed
+  when: agent_apt_key_url is defined
+  block:
+    - name: create temporary file for public key
+      ansible.builtin.tempfile:
+        state: file
+      register: temp_apt_key
+
+    - name: download public key
+      ansible.builtin.get_url:
+        url: "{{ agent_apt_key_url }}"
+        dest: "{{ temp_apt_key.path }}.asc"
+      register: temp_armored_apt_key
+
+    - name: install public key to keyring
+      ansible.builtin.shell: "cat {{ temp_armored_apt_key.dest }} | gpg --dearmor --yes > {{ agent_keyring }}"
+      args:
+        creates: agent_keyring
+      when: temp_armored_apt_key.dest
+
 - name: ensure do-agent apt repository is enabled
   apt_repository:
-    repo: "{{ agent_apt_repo }}"
+    repo: "{{ agent_apt_repo_with_key }}"
     filename: "{{ agent_apt_repo_file }}"
     update_cache: true
     state: present
-  when: agent_apt_repo is defined
+  when: agent_apt_repo_with_key is defined
 
 - name: ensure do-agent yum repository is enabled
   yum_repository:
