@@ -5,6 +5,7 @@ agent_pre_packages:
   - gnupg
 
 agent_apt_key_url: https://repos.insights.digitalocean.com/sonar-agent.asc
+agent_keyring: /usr/share/keyrings/digitalocean-agent-keyring.gpg
 agent_apt_repo_old: deb https://repos.sonar.digitalocean.com/apt main main
 agent_apt_repo_without_key: "deb https://repos.insights.digitalocean.com/apt/do-agent main main"
 agent_apt_repo_with_key: "deb [signed-by=/usr/share/keyrings/digitalocean-agent-keyring.gpg] https://repos.insights.digitalocean.com/apt/do-agent main main"
