@@ -3,6 +3,7 @@ galaxy_info:
   author: Andrew Starr-Bochicchio
   description: Cross-distro installation of the DigitalOcean monitoring agent
   license: MIT
+  github_branch: main
   min_ansible_version: 1.2
   platforms:
     - name: Ubuntu
