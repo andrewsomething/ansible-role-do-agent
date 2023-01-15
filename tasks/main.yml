@@ -38,6 +38,7 @@
       ansible.builtin.tempfile:
         state: file
       register: temp_apt_key
+      check_mode: false
 
     - name: download public key
       ansible.builtin.get_url:
